@@ -4,21 +4,24 @@ import org.springframework.stereotype.Service;
 
 import com.mongodb.client.MongoClient;
 
+import springbook.chatbotserver.healcheck.model.HealthCheckResponse;
+import springbook.chatbotserver.healcheck.model.HealthStatus;
+
 @Service
-public class MongoHealthCheck {
+public class MongoHealthChecker {
 
 	private final MongoClient mongoClient;
 
-	public MongoHealthCheck(MongoClient mongoClient) {
+	public MongoHealthChecker(MongoClient mongoClient) {
 		this.mongoClient = mongoClient;
 	}
 
-	public boolean mongoHealthCheck() {
+	public  HealthCheckResponse checkHealth() {
 		try {
 			mongoClient.listDatabaseNames().first();
-			return true;
+			return new HealthCheckResponse(HealthStatus.UP);
 		} catch (Exception e) {
-			return false;
+			return new HealthCheckResponse(HealthStatus.DOWN);
 		}
 	}
 }

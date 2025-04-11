@@ -1,9 +1,12 @@
 package springbook.chatbotserver.healcheck.service;
 
+import org.springframework.stereotype.Service;
+
 import springbook.chatbotserver.healcheck.model.HealthCheckResponse;
 import springbook.chatbotserver.healcheck.model.HealthStatus;
 
-public class HealthCheckService {
-	public static HealthCheckResponse checkHealth(){return new HealthCheckResponse(HealthStatus.UP);
+@Service
+public class ServerHealthChecker {
+	public HealthCheckResponse checkHealth(){return new HealthCheckResponse(HealthStatus.UP);
 	}
 }

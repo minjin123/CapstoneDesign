@@ -1,4 +1,4 @@
 package springbook.chatbotserver.healcheck.model;
 
-public record HealthCheckResponse() {
+public record HealthCheckResponse(HealthStatus status) {
 }

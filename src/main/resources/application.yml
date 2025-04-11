@@ -1,0 +1,32 @@
+spring:
+  data:
+    mongodb:
+      uri: ENC(8r1mFBTc3943z7xKU00cOl5VJeRZn8MYj9W6ISqWLCgppGacKuv4+DXw1t9Lu6t0bCKRX4PUYEcpwDtjyWQ438s4WP1KtaydnD+AVBPUjOM=)
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+    algorithm: PBEWithMD5AndDES
+    key-obtention-iterations: 1000
+    pool-size: 1
+    provider-class: SunJCE
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    string-output-type: base64
+
+openai:
+  api:
+    key: ENC(lIt9EMiXkzNkl2WMSjxOZkwxhIaTpt8SCTaMm9JrD2KndY9E74KUVWV5NI7FAPR/3hcghjwoamvzKMD8YzGtegEWyWSFw5y22WO9mkawVKHMsIb/RBkdCMIw8hcijdj1fzA5VS9oKpsa/+N4vd+doQlT2but927mzG3Gd1ev/oXfrFNhKVmzofPjoIdU6frIX9ssBPa54bNH7d36/g59lcDoHqhBNxwT7yaf7Wzten0=)
+    url: https://api.openai.com/v1/chat/completions
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    display-request-duration: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

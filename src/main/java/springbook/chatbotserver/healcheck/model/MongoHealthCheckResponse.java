@@ -1,4 +1,5 @@
 package springbook.chatbotserver.healcheck.model;
 
-public class MongoHealthCheck {
+public record MongoHealthCheckResponse (HealthStatus status){
+
 }
