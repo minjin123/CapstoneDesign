@@ -14,11 +14,6 @@ jasypt:
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
     string-output-type: base64
 
-openai:
-  api:
-    key: ENC(lIt9EMiXkzNkl2WMSjxOZkwxhIaTpt8SCTaMm9JrD2KndY9E74KUVWV5NI7FAPR/3hcghjwoamvzKMD8YzGtegEWyWSFw5y22WO9mkawVKHMsIb/RBkdCMIw8hcijdj1fzA5VS9oKpsa/+N4vd+doQlT2but927mzG3Gd1ev/oXfrFNhKVmzofPjoIdU6frIX9ssBPa54bNH7d36/g59lcDoHqhBNxwT7yaf7Wzten0=)
-    url: https://api.openai.com/v1/chat/completions
-
 springdoc:
   api-docs:
     path: /v3/api-docs
