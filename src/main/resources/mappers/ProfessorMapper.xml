@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="springbook.chatbotserver.chat.model.mapper.ProfessorMapper">
+
+    <select id="findOfficeByProfessorName" resultType="springbook.chatbotserver.chat.model.domain.Professor">
+        SELECT b.name AS buildingName, p.professor_office AS office, b.map_url AS mapUrl
+        FROM professors p
+                 JOIN departments d ON p.department_id = d.id
+                 JOIN buildings b ON d.building_number = b.building_number
+        WHERE p.name = #{professorName};
+    </select>
+</mapper>

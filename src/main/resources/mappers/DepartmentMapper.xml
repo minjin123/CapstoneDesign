@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="springbook.chatbotserver.chat.model.mapper.DepartmentMapper">
+
+    <select id="findDepartmentsInBuilding" resultType="springbook.chatbotserver.chat.model.domain.Department">
+        SELECT d.name
+        FROM departments d
+                 JOIN buildings b ON d.building_number = b.building_number
+        WHERE b.name = #{buildingName};
+    </select>
+</mapper>
