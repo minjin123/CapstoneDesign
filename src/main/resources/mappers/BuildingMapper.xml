@@ -16,4 +16,9 @@
                  JOIN departments d ON d.building_number = b.building_number
         WHERE d.name = #{departmentName};
     </select>
+    <select id="findBuildingNumberOfBuildingName" resultType="int">
+        SELECT building_number
+        FROM buildings
+        WHERE name = #{buildingName};
+    </select>
 </mapper>

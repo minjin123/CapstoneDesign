@@ -26,4 +26,12 @@ public interface BuildingMapper {
    * @return 학과가 위치한 건물 객체
    */
   Building findBuildingNameOfDepartment(@Param("departmentName") String departmentName);
+
+  /**
+   * 건물이름을 기반으로 건물번호를 조회합니다.
+   *
+   * @param buildingName 건물 이름
+   * @return 건물의 고유 번호
+   */
+  int findBuildingNumberOfBuildingName(@Param("buildingName") String buildingName);
 }
