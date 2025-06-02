@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import springbook.chatbotserver.chat.model.domain.Meal;
 import springbook.chatbotserver.chat.model.domain.MealMenu;
 import springbook.chatbotserver.chat.model.dto.MealResponse;
+
 /**
  * 식사 정보와 관련된 DB 조회 기능을 제공하는 MyBatis 매퍼 인터페이스입니다.
  */
@@ -36,4 +37,8 @@ public interface MealMapper {
    * @param mealMenu 식사 ID와 메뉴 항목을 포함하는 식사 메뉴 정보 객체
    */
   void insertMealMenu(@Param("mealMenu") MealMenu mealMenu);
+
+  void deleteMealMenusByDormitoryId(int buildingNumber);
+
+  void deleteMealsByBuildingNumber(int buildingNumber);
 }

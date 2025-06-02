@@ -1,0 +1,57 @@
+package springbook.chatbotserver.chat.service.strategy.intent;
+
+import org.springframework.stereotype.Component;
+
+import springbook.chatbotserver.chat.model.domain.Building;
+import springbook.chatbotserver.chat.model.dto.RoomInfo;
+import springbook.chatbotserver.chat.model.mapper.BuildingMapper;
+import springbook.chatbotserver.chat.service.strategy.AbstractIntentStrategy;
+
+/**
+ * Rasa 챗봇의 'ask_room_location' 인텐트를 처리하는 전략 클래스입니다.
+ * 사용자가 강의실 위치를 요청할 때, 해당 강의실의 건물과 위치 정보를 조회하여 응답을 생성합니다.
+ */
+@Component
+public class RoomNumberStrategy extends AbstractIntentStrategy {
+
+  private final BuildingMapper buildingMapper;
+
+  public RoomNumberStrategy(BuildingMapper buildingMapper) {
+    super("ask_room_location", "room_number");
+    this.buildingMapper = buildingMapper;
+  }
+
+  @Override
+  public String handleEntityValue(String entityValue) {
+
+    RoomInfo roomInfo = parseRoomInfo(entityValue);
+    if (!roomInfo.isValid()) {
+      return "강의실 번호가 올바르지 않습니다. 다시 입력해주세요.";
+    }
+    Building building = buildingMapper.findByBuildingNumber(roomInfo.getBuildingNumber());
+    if (building == null) {
+      return "해당 강의실이 있는 건물은 존재하지 않습니다. 다시 입력해주세요.";
+    }
+
+    return buildLocationMessage(building, roomInfo.getRoomNumber());
+  }
+
+  private RoomInfo parseRoomInfo(String rawCode) {
+    String code = rawCode.replaceAll("[^0-9]", "");
+
+    if (code.length() < 4) {
+      return RoomInfo.invalid();
+    }
+    int buildingNumber = Integer.parseInt(code.substring(0, 2));
+    int roomNumber = Integer.parseInt(code.substring(2, 5));
+
+    return new RoomInfo(buildingNumber, roomNumber);
+  }
+
+  private String buildLocationMessage(Building building, int roomNumber) {
+    return String.format("해당 강의실은 %s %d호에 있습니다.\n건물 위치는 다음과 같습니다.\n[건물 위치](%s)",
+        building.getName(), roomNumber, building.getMapUrl());
+  }
+}
+
+

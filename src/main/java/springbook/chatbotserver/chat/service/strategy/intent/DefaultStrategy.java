@@ -1,8 +1,9 @@
-package springbook.chatbotserver.chat.service.strategy;
+package springbook.chatbotserver.chat.service.strategy.intent;
 
 import org.springframework.stereotype.Component;
 
 import springbook.chatbotserver.chat.model.dto.RasaResponse;
+import springbook.chatbotserver.chat.service.strategy.IntentStrategy;
 
 /**
  * Rasa 인텐트를 처리할 수 없는 경우에 대응하는 기본 전략 클래스입니다.

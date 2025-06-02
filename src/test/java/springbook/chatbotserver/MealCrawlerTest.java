@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import springbook.chatbotserver.chat.model.mapper.BuildingMapper;
+import springbook.chatbotserver.chat.model.mapper.MealMapper;
 import springbook.chatbotserver.crawling.domain.dto.CrawledMeal;
 import springbook.chatbotserver.crawling.service.MealCrawler;
 import springbook.chatbotserver.crawling.service.MealSaveService;
@@ -22,6 +24,10 @@ public class MealCrawlerTest {
   private MealCrawler mealCrawler;
   @Autowired
   private MealSaveService mealSaveService;
+  @Autowired
+  private MealMapper mealMapper;
+  @Autowired
+  private BuildingMapper buildingMapper;
 
   @Test
   void crawMealTest() throws Exception {
@@ -34,12 +40,21 @@ public class MealCrawlerTest {
     for (String[] dorm : dorms) {
       String dormName = dorm[0];
       String url = dorm[1];
-      List<CrawledMeal> result = mealCrawler.crawl(dormName, url);
 
+      int buildingNumber = buildingMapper.findBuildingNumberOfBuildingName(dormName);
+      if (buildingNumber != 0) {
+        mealMapper.deleteMealMenusByDormitoryId(buildingNumber);
+        mealMapper.deleteMealsByBuildingNumber(buildingNumber);
+      }
+      List<CrawledMeal> result = mealCrawler.crawl(dormName, url);
       meals.addAll(result);
+
+
     }
 
     assertFalse(meals.isEmpty());
+
+    mealSaveService.save(meals);
 
     for (CrawledMeal meal : meals) {
       System.out.println("[" + meal.getDormName() + "]");

@@ -16,7 +16,7 @@
         </if>
     </select>
     <insert id="insertMeal" parameterType="springbook.chatbotserver.chat.model.domain.Meal"
-             useGeneratedKeys="true" keyProperty="id">
+            useGeneratedKeys="true" keyProperty="id">
         INSERT INTO meal (dormitory_id, meal_date, meal_type)
         VALUES (#{dormitoryId}, #{date}, #{mealType});
     </insert>
@@ -24,4 +24,17 @@
         INSERT INTO meal_menu (meal_id, menu_item)
         VALUES (#{mealId}, #{menuItem});
     </insert>
+    <delete id="deleteMealMenusByDormitoryId">
+        DELETE
+        FROM meal_menu
+        WHERE meal_id IN (SELECT id
+                          FROM meal
+                          WHERE dormitory_id = #{buildingNumber})
+    </delete>
+    <delete id="deleteMealsByBuildingNumber">
+        DELETE
+        FROM meal
+        WHERE dormitory_id = #{buildingNumber}
+    </delete>
+
 </mapper>
