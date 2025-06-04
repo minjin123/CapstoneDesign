@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import springbook.chatbotserver.chat.model.dto.RasaResponse;
 import springbook.chatbotserver.chat.service.strategy.IntentStrategy;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * Rasa 인텐트를 처리할 수 없는 경우에 대응하는 기본 전략 클래스입니다.
@@ -31,7 +33,7 @@ public class DefaultStrategy implements IntentStrategy {
    */
   @Override
   public String handle(RasaResponse rasaResponse) {
-    return "죄송합니다. 해당 요청을 처리할 수 없습니다.";
+    throw new CustomException(ErrorCode.INTENT_NOT_FOUND);
   }
 }
 

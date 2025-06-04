@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import springbook.chatbotserver.chat.model.domain.Professor;
 import springbook.chatbotserver.chat.model.mapper.ProfessorMapper;
 import springbook.chatbotserver.chat.service.strategy.AbstractIntentStrategy;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * Rasa 챗봇의 'ask_office_of_professor' 인텐트를 처리하는 전략 클래스입니다.
@@ -26,7 +28,7 @@ public class ProfessorStrategy extends AbstractIntentStrategy {
     Professor professor = professorMapper.findOfficeByProfessorName(entityValue);
 
     if (professor == null) {
-      return "해당 교수님은 존재하지 않습니다. 다시 입력해주세요.";
+      throw new CustomException(ErrorCode.PROFESSOR_NOT_FOUND);
     }
 
     return professorLocationMessage(professor, entityValue);

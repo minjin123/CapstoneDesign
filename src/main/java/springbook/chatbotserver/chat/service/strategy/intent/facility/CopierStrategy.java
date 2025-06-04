@@ -1,4 +1,4 @@
-package springbook.chatbotserver.chat.service.strategy.intent;
+package springbook.chatbotserver.chat.service.strategy.intent.facility;
 
 import java.util.List;
 import java.util.Map;
@@ -8,41 +8,41 @@ import org.springframework.stereotype.Component;
 import springbook.chatbotserver.chat.model.domain.Facility;
 import springbook.chatbotserver.chat.model.mapper.FacilityMapper;
 import springbook.chatbotserver.chat.service.strategy.AbstractIntentStrategy;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
- * Rasa 챗봇의 'ask_location_of_store' 인텐트를 처리하는 전략 클래스입니다.
- * 사용자가 매점의 위치를 요청할 때, 해당 매점 정보를 조회하여 응답을 생성합니다.
+ * Rasa 챗봇의 'ask_location_of_copier' 인텐트를 처리하는 전략 클래스입니다.
+ * 사용자가 복사기 또는 프린터기의 위치를 요청할 때, 해당 시설 정보를 조회하여 응답을 생성합니다.
  */
 @Component
-public class StoreStrategy extends AbstractIntentStrategy {
+public class CopierStrategy extends AbstractIntentStrategy {
 
   private static final Map<String, String> facilityMap = Map.of(
-      "교내매점", "store",
-      "매점", "store"
+      "복사기", "copier",
+      "프린터기", "copier"
   );
   private final FacilityMapper facilityMapper;
 
-  public StoreStrategy(FacilityMapper facilityMapper) {
-    super("ask_location_of_store", "facility");
+  public CopierStrategy(FacilityMapper facilityMapper) {
+    super("ask_location_of_copier", "facility");
     this.facilityMapper = facilityMapper;
   }
 
   @Override
   public String handleEntityValue(String entityValue) {
-
     String facilityType = facilityMap.getOrDefault(entityValue, "");
     List<Facility> facilities = facilityMapper.findByFacilityType(facilityType);
-
     if (facilities.isEmpty()) {
-      return "해당 시설은 존재하지 않습니다. 다시 입력해주세요.";
+      throw new CustomException(ErrorCode.FACILITY_NOT_FOUND);
     }
 
-    return storeLocationMessage(facilities);
+    return copierLocationMessage(facilities);
   }
 
-  private String storeLocationMessage(List<Facility> facilities) {
+  private String copierLocationMessage(List<Facility> facilities) {
     StringBuilder sb = new StringBuilder();
-    sb.append("다음은 매점이 위치한 장소입니다:\n\n");
+    sb.append("다음은 복사기 또는 프린터기가 위치한 장소입니다:\n\n");
     for (Facility facility : facilities) {
       sb.append("- ")
           .append(facility.getName())

@@ -17,6 +17,8 @@ import springbook.chatbotserver.chat.model.repository.ChatLogRepository;
 import springbook.chatbotserver.chat.service.strategy.IntentStrategy;
 import springbook.chatbotserver.chat.service.strategy.StrategyFactory;
 import springbook.chatbotserver.config.RasaProperties;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * Rasa 챗봇과의 통신 및 인텐트 처리 전략 실행을 담당하는 서비스 클래스입니다.
@@ -41,29 +43,28 @@ public class RasaService {
    */
   public String sendMessageToRasa(RasaRequest req) {
     // 사용자 메시지 로그 저장
+    saveUserMessage(req);
+
+    // Rasa 서버에 POST 요청
+    RasaResponse rasa = getRasaResponse(req);
+
+    // 챗봇 응답 메시지 로그 저장
+    saveBotMessage(req, rasa);
+
+    // 전략 실행
+    return handleIntent(rasa);
+  }
+
+  private void saveUserMessage(RasaRequest req) {
     chatLogRepository.save(ChatLog.builder()
         .deviceId(req.getDeviceId())
         .timestamp(LocalDateTime.now())
         .messageType("user")
         .text(req.getText())
         .build());
+  }
 
-    // Rasa 서버에 POST 요청
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<RasaRequest> entity = new HttpEntity<>(req, headers);
-    String rasaUrl = rasaProperties.getUrl();
-    ;
-    ResponseEntity<RasaResponse> response =
-        restTemplate.postForEntity(rasaUrl, entity, RasaResponse.class);
-
-    RasaResponse rasa = response.getBody();
-    if (rasa == null) {
-      throw new RuntimeException("라사서버 응답이 없습니다. 서버 상태를 확인해주세요.");
-    }
-    String intent = rasa.getIntent().getName();
-
-    // 챗봇 응답 메시지 로그 저장
+  private void saveBotMessage(RasaRequest req, RasaResponse rasa) {
     String botText = rasa.getText();
     chatLogRepository.save(ChatLog.builder()
         .deviceId(req.getDeviceId())
@@ -71,9 +72,30 @@ public class RasaService {
         .messageType("bot")
         .text(botText)
         .build());
+  }
 
-    // 전략 실행
+  private RasaResponse getRasaResponse(RasaRequest req) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<RasaRequest> entity = new HttpEntity<>(req, headers);
+
+    ResponseEntity<RasaResponse> response = restTemplate.postForEntity(
+        rasaProperties.getUrl(),
+        entity,
+        RasaResponse.class
+    );
+
+    RasaResponse rasa = response.getBody();
+    if (rasa == null) {
+      throw new CustomException(ErrorCode.RASA_SERVER_ERROR);
+    }
+    return rasa;
+  }
+
+  private String handleIntent(RasaResponse rasa) {
+    String intent = rasa.getIntent().getName();
     IntentStrategy strategy = strategyFactory.getStrategy(intent);
     return strategy.handle(rasa);
   }
+
 }
