@@ -10,6 +10,8 @@ import springbook.chatbotserver.chat.model.dto.RasaResponse;
 import springbook.chatbotserver.chat.model.mapper.BuildingMapper;
 import springbook.chatbotserver.chat.model.mapper.MealMapper;
 import springbook.chatbotserver.chat.service.strategy.IntentStrategy;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * Rasa 챗봇의 'ask_meal_of_dormitory' 인텐트를 처리하는 전략 클래스입니다.
@@ -43,10 +45,9 @@ public class MealStrategy implements IntentStrategy {
     String dorm = extract(response, "dorm", "");
     String time = extract(response, "time", "오늘");
     String mealType = extract(response, "meal_type", "ALL");
-
-    int buildingNumber = buildingMapper.findBuildingNumberOfBuildingName(dorm);
-    if (buildingNumber == 0) {
-      return "해당 식당은 존재하지 않습니다. 다시 입력해주세요.";
+    Integer buildingNumber = buildingMapper.findBuildingNumberOfBuildingName(dorm);
+    if (buildingNumber == null) {
+      throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND);
     }
     if ("이번주".equals(time)) {
       return mealMessageBuilder.buildWeekMenuMessage(dorm);
@@ -54,7 +55,7 @@ public class MealStrategy implements IntentStrategy {
     String mealDate = DateResolver.resolve(time);
     List<MealResponse> meals = mealMapper.findMealsByDates(buildingNumber, mealDate, mealType);
     if (meals.isEmpty()) {
-      return dorm + "의 " + mealDate + " 식단을 찾을 수 없습니다.";
+      throw new CustomException(ErrorCode.MEAL_NOT_FOUND);
     }
 
     return mealMessageBuilder.buildMealMessage(dorm, mealDate, meals);

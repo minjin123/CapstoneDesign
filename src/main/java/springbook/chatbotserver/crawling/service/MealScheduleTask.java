@@ -7,8 +7,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 import springbook.chatbotserver.crawling.domain.dto.CrawledMeal;
-/*
+
+/**
  * 주기적으로 기숙사 식단 정보를 크롤링하고 데이터베이스에 저장하는 스케줄러 클래스입니다.
  * 매주 일요일 새벽 2시에 실행됩니다.
  */
@@ -18,7 +21,7 @@ public class MealScheduleTask {
   private final MealCrawler mealCrawler;
   private final MealSaveService mealSaveService;
 
-  /* * 매주 일요일 새벽 2시에 기숙사 식단 정보를 크롤링하여 데이터베이스에 저장합니다.
+  /** 매주 일요일 새벽 2시에 기숙사 식단 정보를 크롤링하여 데이터베이스에 저장합니다.
    * 각 기숙사별로 URL을 지정하고, 해당 URL에서 식단 정보를 크롤링합니다.
    * 크롤링된 식단 정보는 MealSaveService를 통해 데이터베이스에 저장됩니다.
    */
@@ -37,7 +40,7 @@ public class MealScheduleTask {
         mealSaveService.save(crawledMeals);
       }
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new CustomException(ErrorCode.FAILED_CRAWLING);
     }
   }
 }

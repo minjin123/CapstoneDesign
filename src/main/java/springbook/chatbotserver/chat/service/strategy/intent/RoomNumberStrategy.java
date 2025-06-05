@@ -6,6 +6,8 @@ import springbook.chatbotserver.chat.model.domain.Building;
 import springbook.chatbotserver.chat.model.dto.RoomInfo;
 import springbook.chatbotserver.chat.model.mapper.BuildingMapper;
 import springbook.chatbotserver.chat.service.strategy.AbstractIntentStrategy;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * Rasa 챗봇의 'ask_room_location' 인텐트를 처리하는 전략 클래스입니다.
@@ -26,11 +28,11 @@ public class RoomNumberStrategy extends AbstractIntentStrategy {
 
     RoomInfo roomInfo = parseRoomInfo(entityValue);
     if (!roomInfo.isValid()) {
-      return "강의실 번호가 올바르지 않습니다. 다시 입력해주세요.";
+      throw new CustomException(ErrorCode.INVALID_ROOM_NUMBER);
     }
     Building building = buildingMapper.findByBuildingNumber(roomInfo.getBuildingNumber());
     if (building == null) {
-      return "해당 강의실이 있는 건물은 존재하지 않습니다. 다시 입력해주세요.";
+      throw new CustomException(ErrorCode.BUILDING_NOT_FOUND);
     }
 
     return buildLocationMessage(building, roomInfo.getRoomNumber());
@@ -42,8 +44,9 @@ public class RoomNumberStrategy extends AbstractIntentStrategy {
     if (code.length() < 4) {
       return RoomInfo.invalid();
     }
-    int buildingNumber = Integer.parseInt(code.substring(0, 2));
-    int roomNumber = Integer.parseInt(code.substring(2, 5));
+    int lastIndex = code.length();
+    int buildingNumber = Integer.parseInt(code.substring(0, lastIndex - 3));
+    int roomNumber = Integer.parseInt(code.substring(lastIndex - 3, lastIndex));
 
     return new RoomInfo(buildingNumber, roomNumber);
   }

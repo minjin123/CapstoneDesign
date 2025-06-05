@@ -33,5 +33,5 @@ public interface BuildingMapper {
    * @param buildingName 건물 이름
    * @return 건물의 고유 번호
    */
-  int findBuildingNumberOfBuildingName(@Param("buildingName") String buildingName);
+  Integer findBuildingNumberOfBuildingName(@Param("buildingName") String buildingName);
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import springbook.chatbotserver.chat.model.domain.Building;
 import springbook.chatbotserver.chat.model.mapper.BuildingMapper;
 import springbook.chatbotserver.chat.service.strategy.AbstractIntentStrategy;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * Rasa 챗봇의 'ask_building_of_department' 인텐트를 처리하는 전략 클래스입니다.
@@ -31,7 +33,7 @@ public class DepartmentStrategy extends AbstractIntentStrategy {
     Building building = buildingMapper.findBuildingNameOfDepartment(departmentName);
 
     if (building == null) {
-      return "해당 학과가 있는 건물은 존재하지 않습니다. 다시 입력해주세요.";
+      throw new CustomException(ErrorCode.DEPARTMENT_NOT_FOUND);
     }
 
     return departmentLocationMessage(building, departmentName);
@@ -44,7 +46,7 @@ public class DepartmentStrategy extends AbstractIntentStrategy {
   }
 
   private String departmentLocationMessage(Building building, String departmentName) {
-    return String.format("%s 학과는 %s에 있습니다.\n[건물 위치](%s)",
+    return String.format("%s는 %s에 있습니다.\n[건물 위치](%s)",
         departmentName, building.getName(), building.getMapUrl());
   }
 }
