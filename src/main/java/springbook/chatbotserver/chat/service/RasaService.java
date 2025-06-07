@@ -49,10 +49,11 @@ public class RasaService {
     RasaResponse rasa = getRasaResponse(req);
 
     // 챗봇 응답 메시지 로그 저장
-    saveBotMessage(req, rasa);
+    String botMessage = handleIntent(rasa);
+    saveBotMessage(req, botMessage);
 
     // 전략 실행
-    return handleIntent(rasa);
+    return botMessage;
   }
 
   private void saveUserMessage(RasaRequest req) {
@@ -64,8 +65,7 @@ public class RasaService {
         .build());
   }
 
-  private void saveBotMessage(RasaRequest req, RasaResponse rasa) {
-    String botText = rasa.getText();
+  private void saveBotMessage(RasaRequest req, String botText) {
     chatLogRepository.save(ChatLog.builder()
         .deviceId(req.getDeviceId())
         .timestamp(LocalDateTime.now())
