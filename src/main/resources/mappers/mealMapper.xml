@@ -24,17 +24,12 @@
         INSERT INTO meal_menu (meal_id, menu_item)
         VALUES (#{mealId}, #{menuItem});
     </insert>
-    <delete id="deleteMealMenusByDormitoryId">
-        DELETE
-        FROM meal_menu
-        WHERE meal_id IN (SELECT id
-                          FROM meal
-                          WHERE dormitory_id = #{buildingNumber})
+    <delete id="deleteAllMealMenus">
+        DELETE FROM meal_menu
     </delete>
-    <delete id="deleteMealsByBuildingNumber">
-        DELETE
-        FROM meal
-        WHERE dormitory_id = #{buildingNumber}
+
+    <delete id="deleteAllMeals">
+        DELETE FROM meal
     </delete>
 
 </mapper>

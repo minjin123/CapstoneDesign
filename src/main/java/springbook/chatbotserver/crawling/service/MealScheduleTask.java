@@ -28,6 +28,7 @@ public class MealScheduleTask {
   @Scheduled(cron = "0 0 2 ? * SUN")
   public void updateWeeklyMeals() {
     try {
+
       List<String[]> dorms = List.of(
           new String[] {"혜화문화관", "https://www.dju.ac.kr/dju/cm/cntnts/cntntsView.do?mi=7064&cntntsId=4222"},
           new String[] {"2생활관", "https://www.dju.ac.kr/dju/cm/cntnts/cntntsView.do?cntntsId=4223&mi=7065"},

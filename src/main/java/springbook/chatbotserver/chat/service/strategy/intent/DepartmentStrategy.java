@@ -46,7 +46,7 @@ public class DepartmentStrategy extends AbstractIntentStrategy {
   }
 
   private String departmentLocationMessage(Building building, String departmentName) {
-    return String.format("%s는 %s에 있습니다.\n[건물 위치](%s)",
+    return String.format("%s는 %s에 있습니다.\n%s",
         departmentName, building.getName(), building.getMapUrl());
   }
 }

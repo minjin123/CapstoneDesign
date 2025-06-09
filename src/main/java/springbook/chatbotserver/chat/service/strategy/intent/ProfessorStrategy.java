@@ -35,7 +35,7 @@ public class ProfessorStrategy extends AbstractIntentStrategy {
   }
 
   private String professorLocationMessage(Professor professor, String professorName) {
-    return String.format("%s 교수님의 교수실은 %s %s에 있습니다.\n[건물 위치](%s)\n\n",
+    return String.format("%s 교수님의 교수실은 %s %s에 있습니다.\n%s",
         professorName, professor.getBuildingName(), professor.getOffice(), professor.getMapUrl());
   }
 }

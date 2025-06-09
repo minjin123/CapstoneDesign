@@ -38,7 +38,13 @@ public interface MealMapper {
    */
   void insertMealMenu(@Param("mealMenu") MealMenu mealMenu);
 
-  void deleteMealMenusByDormitoryId(int buildingNumber);
+  /**
+   * 날짜에 해당하는 모든 식사 정보를 삭제합니다.
+   */
+  void deleteAllMealMenus();
 
-  void deleteMealsByBuildingNumber(int buildingNumber);
+  /**
+   * 모든 식사 정보를 삭제합니다.
+   */
+  void deleteAllMeals();
 }

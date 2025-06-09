@@ -27,6 +27,14 @@ import springbook.chatbotserver.crawling.domain.dto.CrawledMeal;
 @RequiredArgsConstructor
 public class MealCrawler {
 
+  /**
+   * 지정된 URL에서 식단 정보를 크롤링합니다.
+   *
+   * @param dormName 식당 이름
+   * @param url 크롤링할 URL
+   * @return 크롤링된 식단 정보 리스트
+   * @throws IOException HTML 문서를 가져오는 중 오류가 발생한 경우
+   */
   public List<CrawledMeal> crawl(String dormName, String url) throws IOException {
     Document doc = Jsoup.connect(url).get();
     Element targetTable = doc.selectFirst("table");

@@ -1,6 +1,8 @@
 package springbook.chatbotserver.chat.service.strategy;
 
 import springbook.chatbotserver.chat.model.dto.RasaResponse;
+import springbook.chatbotserver.config.exception.CustomException;
+import springbook.chatbotserver.config.exception.ErrorCode;
 
 /**
  * 개별 전략 클래스들이 상속하여 사용할 수 있는 템플릿 클래스입니다.
@@ -24,6 +26,9 @@ public abstract class AbstractIntentStrategy implements IntentStrategy {
   @Override
   public String handle(RasaResponse response) {
     String entityValue = getEntityValue(response, entityName);
+    if (entityValue.isBlank()) {
+      throw new CustomException(ErrorCode.INTENT_NOT_FOUND);
+    }
     return handleEntityValue(entityValue);
   }
 

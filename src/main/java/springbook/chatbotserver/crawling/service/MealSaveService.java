@@ -38,6 +38,14 @@ public class MealSaveService {
       saveMealAndMenuItems(crawledMeal, menuItems);
     }
   }
+  /**
+   * 데이터베이스의 모든 식단 정보를 삭제합니다.
+   * Meal과 MealMenu 테이블의 모든 데이터를 제거합니다.
+   */
+  public void deleteAll() {
+    mealMapper.deleteAllMealMenus();
+    mealMapper.deleteAllMeals();
+  }
 
   private List<String> parseMenuItems(String menuItemsRaw) {
     return Arrays.stream(menuItemsRaw.split("[\\r\\n]+"))
@@ -48,7 +56,7 @@ public class MealSaveService {
 
   private void saveMealAndMenuItems(CrawledMeal crawledMeal, List<String> menuItems) {
     String dormName = crawledMeal.getDormName();
-    int buildingNumber = buildingMapper.findBuildingNumberOfBuildingName(dormName);
+    Integer buildingNumber = buildingMapper.findBuildingNumberOfBuildingName(dormName);
 
     Meal meal = Meal.of(buildingNumber, crawledMeal.getDate(), crawledMeal.getMealType());
     mealMapper.insertMeal(meal);
