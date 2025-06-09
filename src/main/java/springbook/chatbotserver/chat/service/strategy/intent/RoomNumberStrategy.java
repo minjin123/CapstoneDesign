@@ -52,7 +52,7 @@ public class RoomNumberStrategy extends AbstractIntentStrategy {
   }
 
   private String buildLocationMessage(Building building, int roomNumber) {
-    return String.format("해당 강의실은 %s %d호에 있습니다.\n건물 위치는 다음과 같습니다.\n[건물 위치](%s)",
+    return String.format("해당 강의실은 %s %d호에 있습니다.\n건물 위치는 다음과 같습니다.\n%s",
         building.getName(), roomNumber, building.getMapUrl());
   }
 }

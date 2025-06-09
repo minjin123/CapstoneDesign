@@ -25,8 +25,6 @@ public class MealCrawlerTest {
   @Autowired
   private MealSaveService mealSaveService;
   @Autowired
-  private MealMapper mealMapper;
-  @Autowired
   private BuildingMapper buildingMapper;
 
   @Test
@@ -41,11 +39,8 @@ public class MealCrawlerTest {
       String dormName = dorm[0];
       String url = dorm[1];
 
-      int buildingNumber = buildingMapper.findBuildingNumberOfBuildingName(dormName);
-      if (buildingNumber != 0) {
-        mealMapper.deleteMealMenusByDormitoryId(buildingNumber);
-        mealMapper.deleteMealsByBuildingNumber(buildingNumber);
-      }
+      mealSaveService.deleteAll();
+
       List<CrawledMeal> result = mealCrawler.crawl(dormName, url);
       meals.addAll(result);
 

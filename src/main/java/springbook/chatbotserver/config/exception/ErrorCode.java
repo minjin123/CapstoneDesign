@@ -14,7 +14,7 @@ public enum ErrorCode {
 
   // 400 Bad Request
   INVALID_ROOM_NUMBER(HttpStatus.BAD_REQUEST, 1000, "강의실 번호가 올바르지 않습니다. 다시 입력해주세요."),
-
+  INVALID_date(HttpStatus.BAD_REQUEST, 1001, "날짜 형식이 올바르지 않습니다. ex) 월요일, 오늘, 6월 13일 등"),
   // 404 Not Found
   FACILITY_NOT_FOUND(HttpStatus.NOT_FOUND, 1001, "해당 시설은 존재하지 않습니다. 다시 입력해주세요."),
   DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, 1002, "해당 학과는 존재하지 않습니다. 다시 입력해주세요."),
@@ -22,7 +22,7 @@ public enum ErrorCode {
   BUILDING_NOT_FOUND(HttpStatus.NOT_FOUND, 1004, "해당 강의실이 있는 건물은 존재하지 않습니다. 다시 입력해주세요."),
   RESTAURANT_NOT_FOUND(HttpStatus.NOT_FOUND, 1005, "해당 식당은 존재하지 않습니다. 다시 입력해주세요."),
   MEAL_NOT_FOUND(HttpStatus.NOT_FOUND, 1006, "해당 날짜의 식단은 존재하지 않습니다."),
-  INTENT_NOT_FOUND(HttpStatus.NOT_FOUND, 1007, "죄송합니다. 해당 요청을 처리할 수 없습니다. 다시 시도해주세요."),
+  INTENT_NOT_FOUND(HttpStatus.NOT_FOUND, 1007, "죄송합니다. 해당 요청을 처리할 수 없습니다. 다른 질문 부탁드립니다."),
   TABLE_NOT_FOUND(HttpStatus.NOT_FOUND, 1008, "해당 식단 테이블이 존재하지 않습니다."),
   // 500 Internal Server Error
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5000, "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),

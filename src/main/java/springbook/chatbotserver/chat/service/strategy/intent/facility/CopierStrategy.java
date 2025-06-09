@@ -49,9 +49,8 @@ public class CopierStrategy extends AbstractIntentStrategy {
           .append(" (")
           .append(facility.getLocationDetail())
           .append(")\n")
-          .append("[지도 보기](")
           .append(facility.getMapUrl())
-          .append(")\n\n");
+          .append("\n\n");
     }
     return sb.toString().trim();
   }
