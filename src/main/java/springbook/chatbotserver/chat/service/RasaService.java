@@ -2,6 +2,7 @@ package springbook.chatbotserver.chat.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,7 +17,6 @@ import springbook.chatbotserver.chat.model.dto.RasaResponse;
 import springbook.chatbotserver.chat.model.repository.ChatLogRepository;
 import springbook.chatbotserver.chat.service.strategy.IntentStrategy;
 import springbook.chatbotserver.chat.service.strategy.StrategyFactory;
-import springbook.chatbotserver.config.RasaProperties;
 import springbook.chatbotserver.config.exception.CustomException;
 import springbook.chatbotserver.config.exception.ErrorCode;
 
@@ -29,9 +29,10 @@ import springbook.chatbotserver.config.exception.ErrorCode;
 public class RasaService {
 
   private final RestTemplate restTemplate;
-  private final RasaProperties rasaProperties;
   private final StrategyFactory strategyFactory;
   private final ChatLogRepository chatLogRepository;
+  @Value("${IP}")
+  private String ip;
 
   /**
    * 사용자 요청 메시지를 Rasa 서버로 전송하고,
@@ -78,9 +79,9 @@ public class RasaService {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<RasaRequest> entity = new HttpEntity<>(req, headers);
-
+    String rasaUrl = "http://" + ip + ":5005/model/parse";
     ResponseEntity<RasaResponse> response = restTemplate.postForEntity(
-        rasaProperties.getUrl(),
+        rasaUrl,
         entity,
         RasaResponse.class
     );

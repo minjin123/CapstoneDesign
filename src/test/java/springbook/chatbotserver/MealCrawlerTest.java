@@ -9,14 +9,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import springbook.chatbotserver.chat.model.mapper.BuildingMapper;
-import springbook.chatbotserver.chat.model.mapper.MealMapper;
 import springbook.chatbotserver.crawling.domain.dto.CrawledMeal;
 import springbook.chatbotserver.crawling.service.MealCrawler;
 import springbook.chatbotserver.crawling.service.MealSaveService;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("MealCrawler HTML 파싱 테스트")
 public class MealCrawlerTest {
 
@@ -43,7 +44,6 @@ public class MealCrawlerTest {
 
       List<CrawledMeal> result = mealCrawler.crawl(dormName, url);
       meals.addAll(result);
-
 
     }
 
