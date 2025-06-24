@@ -1,6 +1,6 @@
 package springbook.chatbotserver.chat.controller;
 
-import static springbook.chatbotserver.http.ResponseCode.NOT_ISSUE;
+import static springbook.chatbotserver.http.ResponseCode.*;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import springbook.chatbotserver.http.HttpResponseBody;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/chat/logs/{deviceId}")
+@RequestMapping("api/v1/chat/logs")
 public class ChatLogController {
   private final ChatLogService chatLogService;
 
@@ -32,7 +32,7 @@ public class ChatLogController {
    * @param deviceId 디바이스 ID
    * @return 채팅 로그 목록
    */
-  @GetMapping
+  @GetMapping("/{deviceId}")
   public ResponseEntity<Object> getChatLogs(@PathVariable String deviceId) {
     List<ChatMessageDto> chatLogs = chatLogService.getChatLogs(deviceId);
     return HttpResponseBody.builder()

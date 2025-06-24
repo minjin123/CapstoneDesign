@@ -20,7 +20,7 @@ import springbook.chatbotserver.healcheck.service.HealthChecker;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/health")
+@RequestMapping("/api/v1/health")
 @Tag(name = "헬스체크", description = "Spring 서버, MongoDB, Rasa 서버, MariaDB 등 주요 구성 요소의 가용성을 확인하여 서비스 상태를 점검하는 API입니다.")
 public class HealthCheckController {
   private final List<HealthChecker> healthCheckers;

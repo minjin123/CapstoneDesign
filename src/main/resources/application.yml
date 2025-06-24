@@ -1,11 +1,14 @@
 spring:
   data:
     mongodb:
-      uri: ENC(8r1mFBTc3943z7xKU00cOl5VJeRZn8MYj9W6ISqWLCgppGacKuv4+DXw1t9Lu6t0bCKRX4PUYEcpwDtjyWQ438s4WP1KtaydnD+AVBPUjOM=)
-
+      host: mongodb
+      port: 27017
+      database: mydb
+      username: admin
+      password: ENC(+ctJqWTzlzRETWi3r2sKBFaLzV0ZeyNL)
   datasource:
-    url: jdbc:mariadb://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false
-    username: ENC(26KJXNAMZ7cFJIjEp4XX2A==)
+    url: jdbc:mariadb://mariadb-container:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false
+    username: admin
     password: ENC(+N7WLIO0LxO464K7sJ7zwB5Jo9xBATvU)
     driver-class-name: org.mariadb.jdbc.Driver
 
@@ -14,14 +17,6 @@ mybatis:
   type-aliases-package: springbook.chatbotserver.chat.model.domain
   configuration:
     map-underscore-to-camel-case: true
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
 
 jasypt:
   encryptor:
@@ -46,5 +41,3 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
 
-rasa:
-  url: ENC(oXHOxlrfC3PYIUbrMpCVAILOlUUU1eWG9AfeloRTrqOO4zaggTtC9VL7sKw8iwmU)
