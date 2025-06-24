@@ -1,5 +1,6 @@
 package springbook.chatbotserver.healcheck.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,13 +16,17 @@ public class RasaHealthChecker implements HealthChecker {
 
   private final RestTemplate restTemplate;
 
+  @Value("${IP}")
+  private String ip;
+
   public RasaHealthChecker(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
   @Override
   public HealthCheckResponse checkHealth() {
-    String url = "http://localhost:5005/version";
+
+    String url = "http://" + ip + ":5005/version";
     HealthCheckResponse response = restTemplate.getForObject(url, HealthCheckResponse.class);
 
     if (response == null) {
