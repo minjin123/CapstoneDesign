@@ -1,58 +1,35 @@
 package springbook.chatbotserver.healcheck.controller;
 
-import org.springframework.http.HttpStatus;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import springbook.chatbotserver.healcheck.model.HealthCheckResponse;
-import springbook.chatbotserver.healcheck.model.HealthStatus;
-import springbook.chatbotserver.healcheck.service.MongoHealthChecker;
-import springbook.chatbotserver.healcheck.service.RasaHealthChecker;
-import springbook.chatbotserver.healcheck.service.ServerHealthChecker;
+import springbook.chatbotserver.healcheck.service.HealthChecker;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/api/health")
-@Tag(name = "헬스체크", description = "Spring 서버, MongoDB, Rasa 서버 등 주요 구성 요소의 가용성을 확인하여 서비스 상태를 점검하는 API입니다.")
+@Tag(name = "헬스체크", description = "Spring 서버, MongoDB, Rasa 서버, MariaDB 등 주요 구성 요소의 가용성을 확인하여 서비스 상태를 점검하는 API입니다.")
 public class HealthCheckController {
+  private final List<HealthChecker> healthCheckers;
 
-	private final ServerHealthChecker serverHealthChecker;
-	private final MongoHealthChecker mongoHealthChecker;
-	private final RasaHealthChecker rasaHealthChecker;
-
-	public HealthCheckController(ServerHealthChecker serverHealthChecker,
-								MongoHealthChecker mongoHealthChecker,
-								RasaHealthChecker rasaHealthChecker) {
-
-		this.serverHealthChecker = serverHealthChecker;
-		this.mongoHealthChecker = mongoHealthChecker;
-		this.rasaHealthChecker = rasaHealthChecker;
-	}
-
-	@Operation(summary = "서버", description = "서버가 정상적으로 작동하는지 확인합니다.")
-	@GetMapping("/server")
-	public ResponseEntity<Object> healthCheck(){
-		HealthCheckResponse response = serverHealthChecker.checkHealth();
-		return ResponseEntity.ok(response);
-
-	}
-	@Operation(summary = "데이터베이스", description = "데이터베이스가 정상적으로 작동하는지 확인합니다.")
-	@GetMapping("/mongodb")
-	public ResponseEntity<Object> healthCheckMongoDB(){
-		HealthCheckResponse response = mongoHealthChecker.checkHealth();
-		return ResponseEntity.status(response.status() == HealthStatus.UP ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR)
-			.body(response);
-	}
-	@Operation(summary = "rasa", description = "rasa가 정상적으로 작동하는지 확인합니다.")
-	@GetMapping("/rasa")
-	public ResponseEntity<Object> healthCheckRasa(){
-		HealthCheckResponse response = rasaHealthChecker.checkHealth();
-		return ResponseEntity.status(response.status() == HealthStatus.UP ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR)
-			.body(response);
-	}
-
+  @GetMapping("/all")
+  @Operation(summary = "전체 헬스체크", description = "서비스의 가용성을 확인합니다. 모든 구성 요소의 상태를 반환합니다.")
+  public ResponseEntity<Map<String, HealthCheckResponse>> checkAll() {
+    Map<String, HealthCheckResponse> result = new LinkedHashMap<>();
+    for (HealthChecker healthChecker : healthCheckers) {
+      HealthCheckResponse response = healthChecker.checkHealth();
+      result.put(healthChecker.target(), response);
+    }
+    return ResponseEntity.ok(result);
+  }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="springbook.chatbotserver.chat.model.mapper.MealMapper">
+
+    <select id="findMealsByDates" resultType="springbook.chatbotserver.chat.model.dto.MealResponse">
+        SELECT mm.menu_item, m.meal_date, m.meal_type
+        FROM meal m
+        JOIN meal_menu mm ON m.id = mm.meal_id
+        WHERE m.dormitory_id = #{buildingNumber}
+        AND m.meal_date = #{mealDate}
+        <if test="mealType != null and mealType != 'ALL'">
+            AND m.meal_type = #{mealType};
+        </if>
+    </select>
+    <insert id="insertMeal" parameterType="springbook.chatbotserver.chat.model.domain.Meal"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO meal (dormitory_id, meal_date, meal_type)
+        VALUES (#{dormitoryId}, #{date}, #{mealType});
+    </insert>
+    <insert id="insertMealMenu" parameterType="springbook.chatbotserver.chat.model.domain.MealMenu">
+        INSERT INTO meal_menu (meal_id, menu_item)
+        VALUES (#{mealId}, #{menuItem});
+    </insert>
+    <delete id="deleteAllMealMenus">
+        DELETE FROM meal_menu
+    </delete>
+
+    <delete id="deleteAllMeals">
+        DELETE FROM meal
+    </delete>
+
+</mapper>
