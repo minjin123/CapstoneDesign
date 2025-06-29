@@ -1,0 +1,44 @@
+spring:
+  data:
+    mongodb:
+      uri: ENC(8r1mFBTc3943z7xKU00cOl5VJeRZn8MYj9W6ISqWLCgppGacKuv4+DXw1t9Lu6t0bCKRX4PUYEcpwDtjyWQ438s4WP1KtaydnD+AVBPUjOM=)
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false
+    username: ENC(26KJXNAMZ7cFJIjEp4XX2A==)
+    password: ENC(+N7WLIO0LxO464K7sJ7zwB5Jo9xBATvU)
+    driver-class-name: org.mariadb.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:/mappers/**/*.xml
+  type-aliases-package: springbook.chatbotserver.chat.model.domain
+  configuration:
+    map-underscore-to-camel-case: true
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+    algorithm: PBEWithMD5AndDES
+    key-obtention-iterations: 1000
+    pool-size: 1
+    provider-class: SunJCE
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    string-output-type: base64
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    display-request-duration: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+IP: 127.0.0.1
+server:
+  address: 0.0.0.0
+  port: 8080
